@@ -1,5 +1,6 @@
 import React from "react";
-
+import char1 from "../Assets/black diaminds charcoal innovations.jpg";
+import char2 from "../Assets/prod-20210611-2141056507810589040688126-jpg-500x500.webp";
 const About = () => {
   return (
     <div>
@@ -25,14 +26,10 @@ const About = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 gap-4 mt-8">
-            <img
-              className="w-full rounded-lg"
-              src="https://www.ecoblaze.co.uk/static/5f0ace56c2867055a975126e6990a630/be002/1n6438lmunsvqz_Charbriq-2.webp"
-              alt="charcoal"
-            />
+            <img className="w-full rounded-lg" src={char1} alt="charcoal" />
             <img
               className="mt-4 w-full lg:mt-10 rounded-lg"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNOrSgFdiM4MDK0vIKhceG5AaMfThbmNWsgg&s"
+              src={char2}
               alt="charcoal"
             />
           </div>

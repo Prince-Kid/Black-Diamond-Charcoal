@@ -1,6 +1,12 @@
 import React from "react";
+import { useState } from "react";
 
 const Footer = () => {
+  const [active, setActive] = useState("home");
+
+  const handleSetActive = (section: string) => {
+    setActive(section);
+  };
   return (
     <div>
       <footer id="footer" className="p-4 bg-white sm:p-6 dark:bg-gray-800">
@@ -19,19 +25,57 @@ const Footer = () => {
               </a>
             </div>
             <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
-              <div>
+              <div className="">
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                  Resources
+                  LINKS
                 </h2>
                 <ul className="text-gray-600 dark:text-gray-400">
-                  <li className="mb-4">
-                    <a href="/" className="hover:underline">
-                      Black Diamond Charcoal
+                  <li>
+                    <a
+                      href="#hero"
+                      onClick={() => handleSetActive("home")}
+                      className={`block py-2 pr-4 pl-3 ${
+                        active === "home" ? "text-primary-700" : "text-gray-700"
+                      } rounded lg:bg-transparent`}
+                    >
+                      Home
                     </a>
                   </li>
                   <li>
-                    <a href="/" className="hover:underline">
-                      Tailwind CSS
+                    <a
+                      href="#about"
+                      onClick={() => handleSetActive("about")}
+                      className={`block py-2 pr-4 pl-3 ${
+                        active === "about"
+                          ? "text-primary-700"
+                          : "text-gray-700"
+                      } rounded lg:bg-transparent `}
+                    >
+                      About Us
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#team"
+                      onClick={() => handleSetActive("team")}
+                      className={`block py-2 pr-4 pl-3 ${
+                        active === "team" ? "text-primary-700" : "text-gray-700"
+                      } rounded lg:bg-transparent`}
+                    >
+                      Team
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#contact"
+                      onClick={() => handleSetActive("contact")}
+                      className={`block py-2 pr-4 pl-3 ${
+                        active === "contact"
+                          ? "text-primary-700"
+                          : "text-gray-700"
+                      } rounded lg:bg-transparent `}
+                    >
+                      Contact Us
                     </a>
                   </li>
                 </ul>
@@ -58,17 +102,22 @@ const Footer = () => {
               </div>
               <div>
                 <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                  Legal
+                  Address
                 </h2>
                 <ul className="text-gray-600 dark:text-gray-400">
                   <li className="mb-4">
                     <a href="#" className="hover:underline">
-                      Privacy Policy
+                      Rubavu,Gisenyi
                     </a>
                   </li>
                   <li>
                     <a href="#" className="hover:underline">
-                      Terms &amp; Conditions
+                      ericmunyaneza087@gmail.com
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:underline">
+                      +250 785 623 396
                     </a>
                   </li>
                 </ul>
@@ -79,7 +128,7 @@ const Footer = () => {
           <div className="sm:flex sm:items-center sm:justify-between">
             <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2024{" "}
-              <a href="https://flowbite.com" className="hover:underline">
+              <a href="/" className="hover:underline">
                 Black Diamond Charcoal
               </a>
               . All Rights Reserved.

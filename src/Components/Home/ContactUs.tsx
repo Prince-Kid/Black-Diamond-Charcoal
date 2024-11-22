@@ -9,8 +9,10 @@ const ContactUs = () => {
             Contact Us
           </h2>
           <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
-            Got a technical issue? Want to send feedback about a beta feature?
-            Need details about our Business plan? Let us know.
+            Looking for premium, eco-friendly charcoal for your home, business
+            We're here to help! Reach out to us for high-quality charcoal
+            solutions tailored to your requirements. Together, let's fuel Rwanda
+            sustainably.
           </p>
           <form action="#" className="space-y-8">
             <div>
