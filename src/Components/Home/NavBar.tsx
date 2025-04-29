@@ -1,146 +1,171 @@
-import React, { useState, useEffect } from "react";
+"use client"
+
+import { useState, useEffect } from "react"
+import { Sun, Moon, Menu, X, Leaf } from "lucide-react"
 
 const NavBar = () => {
-  const [active, setActive] = useState("home");
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [active, setActive] = useState("home")
+  const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark")
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   // Handle toggling dark mode
   const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    const theme = newMode ? "dark" : "light";
-    localStorage.setItem("theme", theme);
-    document.documentElement.classList.toggle("dark", newMode);
-  };
+    const newMode = !darkMode
+    setDarkMode(newMode)
+    const theme = newMode ? "dark" : "light"
+    localStorage.setItem("theme", theme)
+    document.documentElement.classList.toggle("dark", newMode)
+  }
 
   // Initialize theme on first load
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme = localStorage.getItem("theme")
     if (savedTheme === "dark") {
-      document.documentElement.classList.add("dark");
+      document.documentElement.classList.add("dark")
     } else {
-      document.documentElement.classList.remove("dark");
+      document.documentElement.classList.remove("dark")
     }
-  }, []);
+  }, [])
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true)
+      } else {
+        setScrolled(false)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   const handleSetActive = (section: string) => {
-    setActive(section);
-    setIsMobileMenuOpen(false); // Close menu on link click
-  };
+    setActive(section)
+    setIsMobileMenuOpen(false) // Close menu on link click
+  }
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-  };
+    setIsMobileMenuOpen((prev) => !prev)
+  }
+
+  // Navigation links
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About Us" },
+    { id: "products", label: "Products" },
+    { id: "team", label: "Our Team" },
+    { id: "contact", label: "Contact" },
+  ]
 
   return (
-    <header>
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 fixed top-0 left-0 right-0 z-50 shadow-lg pb-7">
-        <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
-            <img
-              src="https://www.pngitem.com/pimgs/m/267-2678022_charcoal-png-transparent-png.png"
-              className="mr-3 h-6 sm:h-9"
-              alt="Black Chalcoal Diamond Logo"
-            />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              Black Chalcoal Diamond
-            </span>
-          </a>
-          <div className="flex items-center lg:order-2">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-md" : "bg-white dark:bg-gray-900 shadow-sm"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <a href="/" className="flex items-center space-x-2">
+              <div className="h-9 w-9 rounded-full bg-green-600 flex items-center justify-center">
+                <Leaf className="h-5 w-5 text-white" />
+              </div>
+              <span className="font-bold text-xl text-gray-900 dark:text-white">
+                Black <span className="text-green-600 dark:text-green-400">Charcoal</span> Diamond
+              </span>
+            </a>
+          </div>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+            {navLinks.map((link) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                onClick={() => handleSetActive(link.id)}
+                className={`relative px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  active === link.id
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400"
+                }`}
+              >
+                {link.label}
+                {active === link.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-green-600 dark:bg-green-400 rounded-full transform origin-left"></span>
+                )}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right side actions */}
+          <div className="flex items-center space-x-2">
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="p-2 rounded-full text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+              aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
             >
-              {darkMode ? (
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 2a8 8 0 018 8 8.001 8.001 0 01-7.485 7.96A7 7 0 0012 4a7.97 7.97 0 00-2-.26A8.005 8.005 0 0110 2z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 15a5 5 0 100-10 5 5 0 000 10zm0 1a6 6 0 110-12 6 6 0 010 12z" />
-                </svg>
-              )}
+              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-            {/* Mobile Menu Toggle */}
+
+            {/* Order Button (Desktop) */}
+            <a
+              href="/order"
+              className="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+            >
+              Order Now
+            </a>
+
+            {/* Mobile menu button */}
             <button
               onClick={toggleMobileMenu}
-              className="p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="md:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Toggle mobile menu"
             >
-              <span className="sr-only">Open main menu</span>
-              {isMobileMenuOpen ? (
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
-          {/* Links */}
-          <div
-            className={`${
-              isMobileMenuOpen ? "block" : "hidden"
-            } justify-between items-center w-full lg:flex lg:w-auto lg:order-1`}
-            id="mobile-menu-2"
-          >
-            <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              {["home", "about", "team", "contact"].map((section) => (
-                <li key={section}>
-                  <a
-                    href={`#${section}`}
-                    onClick={() => handleSetActive(section)}
-                    className={`block py-2 pr-4 pl-3 ${
-                      active === section ? "text-primary-700" : "text-gray-700"
-                    } rounded lg:bg-transparent`}
-                  >
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
-      </nav>
-    </header>
-  );
-};
+      </div>
 
-export default NavBar;
+      {/* Mobile menu */}
+      <div
+        className={`md:hidden transition-all duration-300 ease-in-out overflow-hidden ${
+          isMobileMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 shadow-lg">
+          {navLinks.map((link) => (
+            <a
+              key={link.id}
+              href={`#${link.id}`}
+              onClick={() => handleSetActive(link.id)}
+              className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                active === link.id
+                  ? "bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+                  : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+              }`}
+            >
+              {link.label}
+            </a>
+          ))}
+          <a
+            href="/order"
+            className="block px-3 py-2 rounded-md text-base font-medium bg-green-600 text-white hover:bg-green-700 transition-colors mt-2"
+          >
+            Order Now
+          </a>
+        </div>
+      </div>
+    </header>
+  )
+}
+
+export default NavBar
