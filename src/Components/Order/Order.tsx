@@ -37,10 +37,10 @@ const Order = () => {
     // Send email using EmailJS
     emailjs
       .send(
-        "YOUR_SERVICE_ID", // replace with your EmailJS service ID
-        "YOUR_TEMPLATE_ID", // replace with your EmailJS template ID
+        "service_qpf5oy4", // replace with your EmailJS service ID
+        "template_5lgqpz6", // replace with your EmailJS template ID
         formData, // this will populate the template fields
-        "YOUR_PUBLIC_KEY", // replace with your EmailJS public key
+        "2PQjSbFP5pTWeqNQQ", // replace with your EmailJS public key
       )
       .then(
         (response) => {
