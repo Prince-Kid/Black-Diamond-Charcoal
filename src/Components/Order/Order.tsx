@@ -7,18 +7,20 @@ import NavBar from "../Home/NavBar"
 import { CheckCircle, Package, Truck, CreditCard, ShoppingBag, Phone, MapPin, Mail, User } from "lucide-react"
 
 const Order = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    product: "",
-    quantity: "1",
-    size: "5kg",
-    paymentMethod: "cash",
-    notes: "",
-    totalPrice: "",
-  })
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  phone: "",
+  address: "",
+  product: "",
+  quantity: "1",
+  size: "5kg",
+  paymentMethod: "cash",
+  notes: "",
+  totalPrice: "",
+  unitPrice: "",
+  deliveryDate: "", 
+});
 
   const [orderSubmitted, setOrderSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -40,6 +42,9 @@ const Order = () => {
       // Extract price from product name
       const priceText = selectedProduct.name.split(" - ")[1];
       const priceValue = parseInt(priceText.replace(/[^0-9]/g, ''));
+      
+      // Store unit price
+      updatedFormData.unitPrice = priceValue.toString();
       
       // Calculate total based on quantity
       const quantity = parseInt(name === "quantity" ? value : formData.quantity) || 1;
@@ -286,6 +291,21 @@ const Order = () => {
                             <option value="bankTransfer">Bank Transfer</option>
                           </select>
                         </div>
+
+                         <div>
+    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+      Delivery Date
+    </label>
+    <input
+      type="date"
+      name="deliveryDate"
+      value={formData.deliveryDate}
+      onChange={handleChange}
+      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-3 text-sm text-gray-900 dark:text-white shadow-sm focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition-all"
+      required
+      min={new Date().toISOString().split('T')[0]} // Set min date to today
+    />
+  </div>
                       </div>
                     </div>
 
@@ -361,29 +381,45 @@ const Order = () => {
                     Thank you, {formData.name}, for placing your order. We have received your request and will process
                     it shortly.
                   </p>
-                  <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 mb-6">
-                    <div className="text-left space-y-2">
-                      <p className="text-sm">
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Order Reference:</span>{" "}
-                        <span className="text-gray-600 dark:text-gray-400">
-                          BCD-
-                          {Math.floor(Math.random() * 10000)
-                            .toString()
-                            .padStart(4, "0")}
-                        </span>
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>{" "}
-                        <span className="text-gray-600 dark:text-gray-400">{formData.email}</span>
-                      </p>
-                      <p className="text-sm">
-                        <span className="font-medium text-gray-700 dark:text-gray-300">Product:</span>{" "}
-                        <span className="text-gray-600 dark:text-gray-400">
-                          {products.find((p) => p.id === formData.product)?.name || formData.product}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 mb-6">
+  <div className="text-left space-y-2">
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Order Reference:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">
+        BCD-
+        {Math.floor(Math.random() * 10000)
+          .toString()
+          .padStart(4, "0")}
+      </span>
+    </p>
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">{formData.email}</span>
+    </p>
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Product:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">
+        {products.find((p) => p.id === formData.product)?.name || formData.product}
+      </span>
+    </p>
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Quantity:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">{formData.quantity}</span>
+    </p>
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Delivery Date:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">
+        {formData.deliveryDate ? new Date(formData.deliveryDate).toLocaleDateString() : "Not specified"}
+      </span>
+    </p>
+    <p className="text-sm">
+      <span className="font-medium text-gray-700 dark:text-gray-300">Total Price:</span>{" "}
+      <span className="text-gray-600 dark:text-gray-400">
+        {parseInt(formData.totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} RWF
+      </span>
+    </p>
+  </div>
+</div>
                   <p className="text-gray-600 dark:text-gray-300 mb-8">
                     We will contact you shortly with confirmation and delivery details.
                   </p>
@@ -435,25 +471,29 @@ const Order = () => {
     </span>
   </div>
   {formData.product && (
-    <div className="flex justify-between pt-2">
-      <span className="text-lg font-medium text-gray-800 dark:text-gray-200">Total</span>
-      <span className="text-lg font-bold text-green-600 dark:text-green-400">
-        {(() => {
-          const selectedProduct = products.find(p => p.id === formData.product);
-          if (!selectedProduct) return "0 RWF";
-          
-          // Extract price from the product name
-          const priceText = selectedProduct.name.split(" - ")[1];
-          const priceValue = parseInt(priceText.replace(/[^0-9]/g, ''));
-          
-          // Calculate total
-          const total = priceValue * parseInt(formData.quantity || "1");
-          
-          // Format with thousand separators
-          return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " RWF";
-        })()}
-      </span>
-    </div>
+    <>
+      <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+        <span className="text-gray-600 dark:text-gray-300">Unit Price</span>
+        <span className="font-medium text-gray-900 dark:text-white">
+          {parseInt(formData.unitPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} RWF
+        </span>
+      </div>
+      
+      <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+        <span className="text-gray-600 dark:text-gray-300">Delivery Date</span>
+        <span className="font-medium text-gray-900 dark:text-white">
+          {formData.deliveryDate ? new Date(formData.deliveryDate).toLocaleDateString() : "Not set"}
+        </span>
+      </div>
+      
+      {/* Total price section */}
+      <div className="flex justify-between pt-2">
+        <span className="text-lg font-medium text-gray-800 dark:text-gray-200">Total</span>
+        <span className="text-lg font-bold text-green-600 dark:text-green-400">
+          {parseInt(formData.totalPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} RWF
+        </span>
+      </div>
+    </>
   )}
 </div>
                 {/* Order Process Steps */}
