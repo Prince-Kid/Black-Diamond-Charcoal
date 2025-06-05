@@ -1,5 +1,6 @@
 import CEO from "../Assets/ka BOSS.jpg"
 import CFO from "../Assets/EIPL4939.jpg"
+import CTO from "../Assets/CTO.jpg"
 import TeamCard from "./TeamCard"
 
 const Team = () => {
@@ -24,8 +25,8 @@ const Team = () => {
       name: "MUCYO Prince",
       title: "CTO",
       description:
-        "MUCYO Prince, the CTO of Black Charcoal Diamond, is a technology enthusiast dedicated to advancing sustainable energy solutions in Rwanda. With a strong background in technology and innovation, MUNYANEZA Eric drives the company's efforts to integrate cutting-edge technologies into charcoal production, ensuring efficiency and sustainability.",
-      image: CEO,
+        "MUCYO Prince, the CTO of Black Charcoal Diamond, is a technology enthusiast dedicated to advancing sustainable energy solutions in Rwanda. With a strong background in technology and innovation, MUCYO Prince drives the company's efforts to integrate cutting-edge technologies into charcoal production, ensuring efficiency and sustainability.",
+      image: CTO,
       contact: "+250 783 154 587",
     },
   ]
