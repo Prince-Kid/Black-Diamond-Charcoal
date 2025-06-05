@@ -17,18 +17,41 @@ const Order = () => {
     size: "5kg",
     paymentMethod: "cash",
     notes: "",
+    totalPrice: "",
   })
 
   const [orderSubmitted, setOrderSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const { name, value } = e.target
+  
+  // Update the form data with the new value
+  const updatedFormData = {
+    ...formData,
+    [name]: value,
+  };
+  
+  // Calculate and update price if product or quantity changes
+  if (name === "product" || name === "quantity") {
+    const selectedProduct = products.find(p => p.id === (name === "product" ? value : formData.product));
+    
+    if (selectedProduct) {
+      // Extract price from product name
+      const priceText = selectedProduct.name.split(" - ")[1];
+      const priceValue = parseInt(priceText.replace(/[^0-9]/g, ''));
+      
+      // Calculate total based on quantity
+      const quantity = parseInt(name === "quantity" ? value : formData.quantity) || 1;
+      const total = priceValue * quantity;
+      
+      // Update price in form data
+      updatedFormData.totalPrice = total.toString();
+    }
   }
+  
+  setFormData(updatedFormData);
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -209,7 +232,7 @@ const Order = () => {
                               <option key={product.id} value={product.id}>
                                 {product.name}
                               </option>
-                            ))}
+                            ))}s
                           </select>
                         </div>
 
