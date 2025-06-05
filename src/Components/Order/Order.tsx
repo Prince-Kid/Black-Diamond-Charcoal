@@ -385,34 +385,54 @@ const Order = () => {
                 </h2>
 
                 <div className="space-y-4 mb-6">
-                  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-300">Selected Product</span>
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {formData.product
-                        ? products.find((p) => p.id === formData.product)?.name.split(" - ")[0] || "Select a product"
-                        : "Select a product"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-300">Size</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{formData.size}</span>
-                  </div>
-                  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-gray-600 dark:text-gray-300">Quantity</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{formData.quantity}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-300">Payment Method</span>
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {formData.paymentMethod === "cash"
-                        ? "Cash on Delivery"
-                        : formData.paymentMethod === "mobileMoney"
-                          ? "Mobile Money"
-                          : "Bank Transfer"}
-                    </span>
-                  </div>
-                </div>
-
+  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+    <span className="text-gray-600 dark:text-gray-300">Selected Product</span>
+    <span className="font-medium text-gray-900 dark:text-white">
+      {formData.product
+        ? products.find((p) => p.id === formData.product)?.name.split(" - ")[0] || "Select a product"
+        : "Select a product"}
+    </span>
+  </div>
+  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+    <span className="text-gray-600 dark:text-gray-300">Size</span>
+    <span className="font-medium text-gray-900 dark:text-white">{formData.size}</span>
+  </div>
+  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+    <span className="text-gray-600 dark:text-gray-300">Quantity</span>
+    <span className="font-medium text-gray-900 dark:text-white">{formData.quantity}</span>
+  </div>
+  <div className="flex justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
+    <span className="text-gray-600 dark:text-gray-300">Payment Method</span>
+    <span className="font-medium text-gray-900 dark:text-white">
+      {formData.paymentMethod === "cash"
+        ? "Cash on Delivery"
+        : formData.paymentMethod === "mobileMoney"
+          ? "Mobile Money"
+          : "Bank Transfer"}
+    </span>
+  </div>
+  {formData.product && (
+    <div className="flex justify-between pt-2">
+      <span className="text-lg font-medium text-gray-800 dark:text-gray-200">Total</span>
+      <span className="text-lg font-bold text-green-600 dark:text-green-400">
+        {(() => {
+          const selectedProduct = products.find(p => p.id === formData.product);
+          if (!selectedProduct) return "0 RWF";
+          
+          // Extract price from the product name
+          const priceText = selectedProduct.name.split(" - ")[1];
+          const priceValue = parseInt(priceText.replace(/[^0-9]/g, ''));
+          
+          // Calculate total
+          const total = priceValue * parseInt(formData.quantity || "1");
+          
+          // Format with thousand separators
+          return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " RWF";
+        })()}
+      </span>
+    </div>
+  )}
+</div>
                 {/* Order Process Steps */}
                 <div className="mt-8 space-y-4">
                   <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-4">How It Works</h3>
